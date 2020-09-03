@@ -1,3 +1,3 @@
 #Using MongoDB with Jupyter Labs
 
-TODO
+This demo spins up a 

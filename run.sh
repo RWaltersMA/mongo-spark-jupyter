@@ -32,9 +32,18 @@ docker-compose exec mongo1 /usr/bin/mongo --eval '''if (rs.status()["ok"] == 0) 
     rs.initiate(rsconf);
 }
 
-rs.conf();'''
+rs.conf();
+
+'''
+echo -e "\nUploading test data into CDCData database\n"
+
+docker-compose exec mongo1 apt-get update && apt-get install wget && wget https://raw.githubusercontent.com/RWaltersMA/mongo-spark-jupyter/master/data.csv
+sleep 2
+docker-compose exec mongo1 /usr/bin/mongoimport -d=CDCData -c=obesity --type=csv --file=data.csv --drop --headerline
 
 echo '''
+
+
 
 ==============================================================================================================
 MongoDB Spark Demo
