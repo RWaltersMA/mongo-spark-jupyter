@@ -15,6 +15,9 @@ services:
       - 8888:8888
     volumes:
       - shared-workspace:/opt/workspace
+    networks:
+      - localnet
+
   spark-master:
     image: spark-master
     container_name: spark-master
@@ -23,6 +26,9 @@ services:
       - 7077:7077
     volumes:
       - shared-workspace:/opt/workspace
+    networks:
+      - localnet
+
   spark-worker-1:
     image: spark-worker
     container_name: spark-worker-1
@@ -47,12 +53,14 @@ services:
       - shared-workspace:/opt/workspace
     depends_on:
       - spark-master
+    networks:
+      - localnet
   
   # MongoDB Replica Set
   mongo1:
     image: "mongo:latest"
     container_name: mongo1
-    command: --replSet rs0 --oplogSize 128
+    command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
     volumes:
       - rs1:/data/db
     networks:
@@ -63,7 +71,7 @@ services:
   mongo2:
     image: "mongo:latest"
     container_name: mongo2
-    command: --replSet rs0 --oplogSize 128
+    command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
     volumes:
       - rs2:/data/db
     networks:
@@ -74,7 +82,7 @@ services:
   mongo3:
     image: "mongo:latest"
     container_name: mongo3
-    command: --replSet rs0 --oplogSize 128
+    command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
     volumes:
       - rs3:/data/db
     networks:
@@ -82,7 +90,7 @@ services:
     ports:
       - "27019:27017"
     restart: always
-    
+
 networks:
     localnet:
         attachable: true
