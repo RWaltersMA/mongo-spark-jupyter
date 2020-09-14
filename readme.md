@@ -1,8 +1,8 @@
-#Using MongoDB with Jupyter Labs
+# Using MongoDB with Jupyter Labs
 
 This repository showcases how to leverage MongoDB data in your JupyterLab notebooks via the MongoDB Spark Connector and PySpark.  We will load financial security data from MongoDB, calculate a moving average then update the data in MongoDB with these new data.  This repository has two components:
 - Docker files
-- Data generator (optional)
+- Data generator (optional, see end of this text)
 
 The Docker files will spin up the following environment:
 
@@ -59,4 +59,22 @@ To update the data in our MongoDB cluster, we  use the save method.
 
 In this repository we created a JupyterLab notebook, leaded MongoDB data, computed a moving average and updated the collection with the new data.  This simple example shows how easy it is to integrate MongoDB data within your Spark data science application.  For more information on the Spark Connector check out the [online documentation](https://docs.mongodb.com/spark-connector/master/).  For anyone looking for answers to questions feel free to ask them in the [MongoDB community pages](https://developer.mongodb.com/community/forums/c/connectors-integrations/48).  The MongoDB Connector for Spark is [open source](https://github.com/mongodb/mongo-spark) under the Apache license.  Comments/pull requests are encouraged and welcomed.  Happy data exploration!
 
+
+# Data Generator (optional)
+
+This repository comes with a small sample data set already so it is not necessary to use this tool, however, if you are interested in creating a larger dataset with the same type of financial security data you run the Python3 app within the DataGenerator directory.
+
+`python3 create-stock-data.py`
+
+Parameter | Description
+--------- | ------------
+-s | number of financial stock symbols to generate, default is 10
+-c | MongoDB Connection String, default is mongodb://localhost
+-d | MongoDB Database name default is Stocks
+-w | MongoDB collection to write to default is Source
+-r | MongoDB collection to read from default is Sink
+
+This data generator tool is designed to write to one collection and read from another.  It is also used as part of a Kafka connector demo where the data is flowing through the Kafka system.  In our repository example, if you just want to see the data as it is written to the "Source" collection use the -r parameter as follows:
+
+`python3 create-stock-data.py -r Source`
 
