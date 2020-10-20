@@ -10,9 +10,11 @@ spark = SparkSession.\
         config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.0").\
         getOrCreate()
 
+df = spark.read.format("mongo").load()
+
 df.printSchema()
 
-df = df.withColumn(‘tx_time”, df.tx_time.cast(‘timestamp’))
+df = df.withColumn("tx_time", df.tx_time.cast("timestamp"))
 
 from pyspark.sql.window import Window
 from pyspark.sql import functions as F
