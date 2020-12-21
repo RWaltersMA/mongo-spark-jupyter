@@ -8,17 +8,30 @@ The Docker files will spin up the following environment:
 
 ![Image of docker environment](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/diagram.png)
 
-First run a `build.sh` to create the docker images used for this respoitory.
+## Getting the environment up and running
 
-Next, run the `run.sh` script file runs the docker compose file which creates a three node MongoDB cluster, configures it as a replica set on prt 27017. Spark is also deployed in this environment with a master node located at port 8080 and two worker nodes listening on ports 8081 and 8082 respectively.  The MongoDB cluster will be used for both reading data into Spark and writing data from Spark back into MongoDB. 
+Execute the `run.sh` script file.  This runs the docker compose file which creates a three node MongoDB cluster, configures it as a replica set on prt 27017. Spark is also deployed in this environment with a master node located at port 8080 and two worker nodes listening on ports 8081 and 8082 respectively.  The MongoDB cluster will be used for both reading data into Spark and writing data from Spark back into MongoDB. 
 
-Note: You may have to mark these .SH files executable with the `chmod` command i.e. `chmod +x run.sh`
+Note: You may have to mark the .SH file as runnable with the `chmod` command i.e. `chmod +x run.sh`
 
 To verify our Spark master and works are online navigate to http://localhost:8080
 
 We can verify that the Jupyter Lab is up and running by navigating to the URL: http://localhost:8888
 
-To use MongoDB data with Spark create a new Python Jupyter notebook and SparkSession as follows:
+The Jupyter notebook URL which includes its access token will be listed at the end of the `run.sh` script.  If you launch the containers outside of the `run.sh` script, you can still get the URL by issuing the following command:
+
+`docker exec -it jupyterlab  /opt/conda/bin/jupyter notebook list`
+
+## Playing with MongoDB data in a Jupyter notebook
+
+To use MongoDB data with Spark create a new Python Jupyter notebook by navigating to the Jupyter URL and under notebook select Python 3 :
+
+![Image of New Python notebook](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/newpythonnotebook.png)
+
+Now you can run through the following demo script.  You can copy and execute one or more of these lines :
+
+To start, this will create the SparkSession and set the environment to use our local MongoDB cluster.
+
 ```
 from pyspark.sql import SparkSession
 
@@ -55,7 +68,21 @@ movAvg.show().
 
 To update the data in our MongoDB cluster, we  use the save method.
 
-```movAvg.write.format("mongo").option("replaceDocument", "true").mode("append").save()```
+`movAvg.write.format("mongo").option("replaceDocument", "true").mode("append").save()`
+
+We can also use the power of the MongoDB Aggregation Framework to pre-filter, sort or aggregate our MongoDB data.
+
+```
+pipeline = "[{'$group': {_id:'$company_name', 'maxprice': {$max:'$price'}}},{$sort:{'maxprice':-1}}]"
+aggPipelineDF = spark.read.format("mongo").option("pipeline", pipeline).load()
+aggPipelineDF.show()
+```
+
+Finally we can use SparkSQL to issue ANSI-compliant SQL against MongoDB data as follows:
+
+```movAvg.createOrReplaceTempView("avgs")
+sqlDF=spark.sql("SELECT * FROM avgs WHERE movingAverage > 43.0")
+sqlDF.show()```
 
 In this repository we created a JupyterLab notebook, leaded MongoDB data, computed a moving average and updated the collection with the new data.  This simple example shows how easy it is to integrate MongoDB data within your Spark data science application.  For more information on the Spark Connector check out the [online documentation](https://docs.mongodb.com/spark-connector/master/).  For anyone looking for answers to questions feel free to ask them in the [MongoDB community pages](https://developer.mongodb.com/community/forums/c/connectors-integrations/48).  The MongoDB Connector for Spark is [open source](https://github.com/mongodb/mongo-spark) under the Apache license.  Comments/pull requests are encouraged and welcomed.  Happy data exploration!
 
