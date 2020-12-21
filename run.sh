@@ -50,7 +50,12 @@ echo '''
 ==============================================================================================================
 MongoDB Spark Demo
 
-Jypterlab - http://localhost:8888
+Jypterlab
+'''
+
+docker exec -it jupyterlab  /opt/conda/bin/jupyter notebook list
+
+echo '''
 Spark Master - http://localhost:8080
 Spark Worker 1
 Spark Worker 2
