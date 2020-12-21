@@ -18,7 +18,11 @@ To verify our Spark master and works are online navigate to http://localhost:808
 
 We can verify that the Jupyter Lab is up and running by navigating to the URL: http://localhost:8888
 
-The Jupyter notebook URL which includes its access token will be listed at the end of the `run.sh` script.  If you launch the containers outside of the `run.sh` script, you can still get the URL by issuing the following command:
+The Jupyter notebook URL which includes its access token will be listed at the end of the `run.sh` script.  NOTE: This token will be generated when you run the docker image so it will be different for you.  Here is what it looks like:
+
+![Image of url with token](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/url.png)
+
+If you launch the containers outside of the `run.sh` script, you can still get the URL by issuing the following command:
 
 `docker exec -it jupyterlab  /opt/conda/bin/jupyter notebook list`
 
@@ -80,9 +84,11 @@ aggPipelineDF.show()
 
 Finally we can use SparkSQL to issue ANSI-compliant SQL against MongoDB data as follows:
 
-```movAvg.createOrReplaceTempView("avgs")
+```
+movAvg.createOrReplaceTempView("avgs")
 sqlDF=spark.sql("SELECT * FROM avgs WHERE movingAverage > 43.0")
-sqlDF.show()```
+sqlDF.show()
+```
 
 In this repository we created a JupyterLab notebook, leaded MongoDB data, computed a moving average and updated the collection with the new data.  This simple example shows how easy it is to integrate MongoDB data within your Spark data science application.  For more information on the Spark Connector check out the [online documentation](https://docs.mongodb.com/spark-connector/master/).  For anyone looking for answers to questions feel free to ask them in the [MongoDB community pages](https://developer.mongodb.com/community/forums/c/connectors-integrations/48).  The MongoDB Connector for Spark is [open source](https://github.com/mongodb/mongo-spark) under the Apache license.  Comments/pull requests are encouraged and welcomed.  Happy data exploration!
 
