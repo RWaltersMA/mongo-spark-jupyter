@@ -6,7 +6,7 @@ This repository showcases how to leverage MongoDB data in your JupyterLab notebo
 
 The Docker files will spin up the following environment:
 
-![Image of docker environment](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/diagram.png)
+![Image of docker environment](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/images/diagram.png)
 
 ## Getting the environment up and running
 
@@ -20,7 +20,7 @@ We can verify that the Jupyter Lab is up and running by navigating to the URL: h
 
 The Jupyter notebook URL which includes its access token will be listed at the end of the `run.sh` script.  NOTE: This token will be generated when you run the docker image so it will be different for you.  Here is what it looks like:
 
-![Image of url with token](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/url.png)
+![Image of url with token](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/images/url.png)
 
 If you launch the containers outside of the `run.sh` script, you can still get the URL by issuing the following command:
 
@@ -30,7 +30,7 @@ If you launch the containers outside of the `run.sh` script, you can still get t
 
 To use MongoDB data with Spark create a new Python Jupyter notebook by navigating to the Jupyter URL and under notebook select Python 3 :
 
-![Image of New Python notebook](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/newpythonnotebook.png)
+![Image of New Python notebook](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/images/newpythonnotebook.png)
 
 Now you can run through the following demo script.  You can copy and execute one or more of these lines :
 
