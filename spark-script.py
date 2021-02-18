@@ -30,7 +30,7 @@ movAvg.write.format("mongo").option("replaceDocument", "true").mode("append").sa
 
 #Reading Dataframes from the Aggregation Pipeline in MongoDB
 pipeline = "[{'$group': {_id:'$company_name', 'maxprice': {$max:'$price'}}},{$sort:{'maxprice':-1}}]"
-aggPipelineDF = spark.read.format("mongo").option("pipeline", pipeline).load()
+aggPipelineDF = spark.read.format("mongo").option("pipeline", pipeline).option("partitioner", "MongoSinglePartitioner").load()
 aggPipelineDF.show()
 
 #using SparkSQL with MongoDB
