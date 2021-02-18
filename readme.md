@@ -14,11 +14,9 @@ Execute the `run.sh` script file.  This runs the docker compose file which creat
 
 Note: You may have to mark the .SH file as runnable with the `chmod` command i.e. `chmod +x run.sh`
 
-If you are using Windows, launch a PowerShell command window and run the `run.ps1` script instead of run.sh.
+**If you are using Windows, launch a PowerShell command window and run the `run.ps1` script instead of run.sh.**
 
 To verify our Spark master and works are online navigate to http://localhost:8080
-
-We can verify that the Jupyter Lab is up and running by navigating to the URL: http://localhost:8888
 
 The Jupyter notebook URL which includes its access token will be listed at the end of the script.  NOTE: This token will be generated when you run the docker image so it will be different for you.  Here is what it looks like:
 
@@ -27,7 +25,9 @@ The Jupyter notebook URL which includes its access token will be listed at the e
 If you launch the containers outside of the script, you can still get the URL by issuing the following command:
 
 `docker exec -it jupyterlab  /opt/conda/bin/jupyter notebook list`
+
 or
+
 `docker exec -it jupyterlab  /opt/conda/bin/jupyter server list`
 
 
