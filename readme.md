@@ -10,21 +10,26 @@ The Docker files will spin up the following environment:
 
 ## Getting the environment up and running
 
-Execute the `run.sh` script file.  This runs the docker compose file which creates a three node MongoDB cluster, configures it as a replica set on prt 27017. Spark is also deployed in this environment with a master node located at port 8080 and two worker nodes listening on ports 8081 and 8082 respectively.  The MongoDB cluster will be used for both reading data into Spark and writing data from Spark back into MongoDB. 
+Execute the `run.sh` script file.  This runs the docker compose file which creates a three node MongoDB cluster, configures it as a replica set on prt 27017. Spark is also deployed in this environment with a master node located at port 8080 and two worker nodes listening on ports 8081 and 8082 respectively.  The MongoDB cluster will be used for both reading data into Spark and writing data from Spark back into MongoDB.
 
 Note: You may have to mark the .SH file as runnable with the `chmod` command i.e. `chmod +x run.sh`
+
+If you are using Windows, launch a PowerShell command window and run the `run.ps1` script instead of run.sh.
 
 To verify our Spark master and works are online navigate to http://localhost:8080
 
 We can verify that the Jupyter Lab is up and running by navigating to the URL: http://localhost:8888
 
-The Jupyter notebook URL which includes its access token will be listed at the end of the `run.sh` script.  NOTE: This token will be generated when you run the docker image so it will be different for you.  Here is what it looks like:
+The Jupyter notebook URL which includes its access token will be listed at the end of the script.  NOTE: This token will be generated when you run the docker image so it will be different for you.  Here is what it looks like:
 
 ![Image of url with token](https://github.com/RWaltersMA/mongo-spark-jupyter/blob/master/images/url.png)
 
-If you launch the containers outside of the `run.sh` script, you can still get the URL by issuing the following command:
+If you launch the containers outside of the script, you can still get the URL by issuing the following command:
 
 `docker exec -it jupyterlab  /opt/conda/bin/jupyter notebook list`
+or
+`docker exec -it jupyterlab  /opt/conda/bin/jupyter server list`
+
 
 ## Playing with MongoDB data in a Jupyter notebook
 
@@ -49,7 +54,11 @@ spark = SparkSession.\
         config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.0").\
         getOrCreate()
 ```
-Next, let’s verify the configuration worked by looking at the schema:
+Next load the dataframes from MongoDB
+```
+df = spark.read.format("mongo").load()
+```
+Let’s verify the data was loaded by looking at the schema:
 ```
 df.printSchema()
 ```
@@ -78,7 +87,7 @@ We can also use the power of the MongoDB Aggregation Framework to pre-filter, so
 
 ```
 pipeline = "[{'$group': {_id:'$company_name', 'maxprice': {$max:'$price'}}},{$sort:{'maxprice':-1}}]"
-aggPipelineDF = spark.read.format("mongo").option("pipeline", pipeline).load()
+aggPipelineDF = spark.read.format("mongo").option("pipeline", pipeline).option("partitioner", "MongoSinglePartitioner").load()
 aggPipelineDF.show()
 ```
 
