@@ -9,7 +9,7 @@ volumes:
 
 services:
   jupyterlab:
-    image: jupyter/pyspark-notebook
+    image: jupyter/pyspark-notebook:1a66dd36ff82
     container_name: jupyterlab
     environment:
       - JUPYTER_ENABLE_LAB=yes
@@ -21,7 +21,7 @@ services:
       - localnet
 
   spark-master:
-    image: bde2020/spark-master
+    image: bde2020/spark-master:3.0.0-hadoop3.2
     container_name: spark-master
     ports:
       - 8080:8080
@@ -32,7 +32,7 @@ services:
       - localnet
 
   spark-worker-1:
-    image: bde2020/spark-worker
+    image: bde2020/spark-worker:3.0.0-hadoop3.2
     container_name: spark-worker-1
     environment:
       - SPARK_WORKER_CORES=2
@@ -43,8 +43,10 @@ services:
       - shared-workspace:/opt/workspace
     depends_on:
       - spark-master
+    networks:
+      - localnet
   spark-worker-2:
-    image: bde2020/spark-worker
+    image: bde2020/spark-worker:3.0.0-hadoop3.2
     container_name: spark-worker-2
     environment:
       - SPARK_WORKER_CORES=2
@@ -60,7 +62,7 @@ services:
   
   # MongoDB Replica Set
   mongo1:
-    image: "mongo:latest"
+    image: "mongo:4.0.5"
     container_name: mongo1
     command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
     volumes:
@@ -71,7 +73,7 @@ services:
       - "27017:27017"
     restart: always
   mongo2:
-    image: "mongo:latest"
+    image: "mongo:4.0.5"
     container_name: mongo2
     command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
     volumes:
@@ -82,7 +84,7 @@ services:
       - "27018:27017"
     restart: always
   mongo3:
-    image: "mongo:latest"
+    image: "mongo:4.0.5"
     container_name: mongo3
     command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
     volumes:
