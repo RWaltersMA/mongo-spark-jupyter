@@ -6,6 +6,7 @@ volumes:
   rs1:
   rs2:
   rs3:
+  notebooks:
 
 services:
   jupyterlab:
@@ -17,6 +18,7 @@ services:
       - 8888:8888
     volumes:
       - shared-workspace:/opt/workspace
+      - notebooks:/home/jovyan/work
     networks:
       - localnet
 
