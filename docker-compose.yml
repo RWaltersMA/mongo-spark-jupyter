@@ -18,7 +18,8 @@ services:
       - 8888:8888
     volumes:
       - shared-workspace:/opt/workspace
-      - notebooks:/home/jovyan/work
+      - /f/workspace/notebooks/:/home/jovyan/work
+      - /f/betfair/:/home/jovyan/data
     networks:
       - localnet
 
