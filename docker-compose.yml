@@ -38,8 +38,8 @@ services:
     image: bde2020/spark-worker:3.0.0-hadoop3.2
     container_name: spark-worker-1
     environment:
-      - SPARK_WORKER_CORES=2
-      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=4g
     ports:
       - 8081:8081
     volumes:
@@ -52,8 +52,8 @@ services:
     image: bde2020/spark-worker:3.0.0-hadoop3.2
     container_name: spark-worker-2
     environment:
-      - SPARK_WORKER_CORES=2
-      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_CORES=4
+      - SPARK_WORKER_MEMORY=4g
     ports:
       - 8082:8081
     volumes:
