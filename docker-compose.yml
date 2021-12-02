@@ -10,10 +10,13 @@ volumes:
 
 services:
   jupyterlab:
-    image: jupyter/pyspark-notebook:1a66dd36ff82
+    image: trentsteel777/pyspark-notebook-py377:latest
     container_name: jupyterlab
     environment:
       - JUPYTER_ENABLE_LAB=yes
+      - PYSPARK_DRIVER_PYTHON=python3
+      - PYSPARK_PYTHON=python3
+      - PYTHON_VERSION=3.7
     ports:
       - 8888:8888
     volumes:
@@ -26,6 +29,9 @@ services:
   spark-master:
     image: bde2020/spark-master:3.0.0-hadoop3.2
     container_name: spark-master
+    environment:
+      - PYSPARK_PYTHON=/usr/bin/python3
+      - PYSPARK_DRIVER_PYTHON=/usr/bin/python3
     ports:
       - 8080:8080
       - 7077:7077
@@ -39,7 +45,9 @@ services:
     container_name: spark-worker-1
     environment:
       - SPARK_WORKER_CORES=4
-      - SPARK_WORKER_MEMORY=4g
+      - SPARK_WORKER_MEMORY=5g
+      - PYSPARK_PYTHON=/usr/bin/python3
+      - PYSPARK_DRIVER_PYTHON=/usr/bin/python3
     ports:
       - 8081:8081
     volumes:
@@ -53,7 +61,9 @@ services:
     container_name: spark-worker-2
     environment:
       - SPARK_WORKER_CORES=4
-      - SPARK_WORKER_MEMORY=4g
+      - SPARK_WORKER_MEMORY=5g
+      - PYSPARK_PYTHON=/usr/bin/python3
+      - PYSPARK_DRIVER_PYTHON=/usr/bin/python3
     ports:
       - 8082:8081
     volumes:
