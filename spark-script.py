@@ -7,7 +7,8 @@ spark = SparkSession.\
         config("spark.executor.memory", "1g").\
         config("spark.mongodb.input.uri","mongodb://mongo1:27017,mongo2:27018,mongo3:27019/Stocks.Source?replicaSet=rs0").\
         config("spark.mongodb.output.uri","mongodb://mongo1:27017,mongo2:27018,mongo3:27019/Stocks.Source?replicaSet=rs0").\
-        config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.0").\
+        config("spark.mongodb.input.database","Stocks").\
+        config("spark.jars.packages", "org.mongodb.spark:mongo-spark-connector_2.12:3.0.1").\
         getOrCreate()
 
 #reading dataframes from MongoDB

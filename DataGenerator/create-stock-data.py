@@ -80,7 +80,6 @@ def main():
     parser.add_argument("-d","--database", default='Stocks', help="MongoDB database name")
     parser.add_argument("-w","--write", default='Source', help="MongoDB write to collection name")
     parser.add_argument("-r","--read", default='Sink', help="MongoDB read from collection")
-  
     args = parser.parse_args()
 
     if args.symbols:
@@ -88,6 +87,7 @@ def main():
             args.symbols = 1
 
     MONGO_URI=args.connection
+    print(MONGO_URI)
 
     threads = []
 
@@ -123,7 +123,7 @@ def display():
                 for insert_change in stream:
                     print(insert_change["fullDocument"])
     except:
-        print('READ: Unexpected error :', sys.exc_info()[0])
+        print('READ: Unexpected error :', sys.excinfo()[0])
         raise
 
 def worker(workerthread, numofsymbols):
