@@ -19,29 +19,36 @@ function clean_up {
 
 trap clean_up EXIT
 
+sleep 5
+
 echo -e "\nConfiguring the MongoDB ReplicaSet.\n"
-docker-compose exec mongo1 /usr/bin/mongo --eval '''if (rs.status()["ok"] == 0) {
-    rsconf = {
-      _id : "rs0",
-      members: [
-        { _id : 0, host : "mongo1:27017", priority: 1.0 },
-        { _id : 1, host : "mongo2:27017", priority: 0.5 },
-        { _id : 2, host : "mongo3:27017", priority: 0.5 }
-      ]
-    };
-    rs.initiate(rsconf);
-}
+docker-compose exec mongo1 /usr/bin/mongosh --eval '''rsconf = { _id : "rs0", members: [ { _id : 0, host : "mongo1:27017", priority: 1.0 }]};
+rs.initiate(rsconf);'''
 
-rs.conf();
+#docker-compose exec mongo1 /usr/bin/mongo --eval '''if (rs.status()["ok"] == 0) {
+#    rsconf = {
+#      _id : "rs0",
+#      members: [
+#        { _id : 0, host : "mongo1:27017", priority: 1.0 },
+#        { _id : 1, host : "mongo2:27017", priority: 0.5 },
+#        { _id : 2, host : "mongo3:27017", priority: 0.5 }
+#      ]
+#    };
+#    rs.initiate(rsconf);
+#}
 
-'''
+#rs.conf();
+#
+#docker cp mongosparkv10.jar jupyterlab:/home/jovyan/
+
 echo -e "\nUploading test data into Stocks database\n"
 
-docker-compose exec mongo1 apt-get update
-docker-compose exec mongo1 apt-get install wget 
-docker-compose exec mongo1 wget https://github.com/RWaltersMA/mongo-spark-jupyter/raw/master/Source.bson
+#docker-compose exec mongo1 apt-get update
+#docker-compose exec mongo1 apt-get install wget 
+#docker-compose exec mongo1 wget https://github.com/RWaltersMA/mongo-spark-jupyter/raw/master/Source.bson
 
-docker-compose exec mongo1 /usr/bin/mongorestore Source.bson -h rs0/mongo1:27017,mongo2:27018,mongo3:27019 -d Stocks -c Source --drop
+#docker-compose exec mongo1 /usr/bin/mongorestore Source.bson -h rs0/mongo1:27017,mongo2:27018,mongo3:27019 -d Stocks -c Source --drop
+
 
 echo '''
 
@@ -51,6 +58,9 @@ echo '''
 MongoDB Spark Demo
 
 Jypterlab
+
+docker exec -it jupyterlab  /opt/conda/bin/jupyter server list
+
 '''
 
 docker exec -it jupyterlab  /opt/conda/bin/jupyter server list
@@ -59,7 +69,7 @@ echo '''
 Spark Master - http://localhost:8080
 Spark Worker 1
 Spark Worker 2
-MongoDB Replica Set - port 27017-27019
+MongoDB single node replica set - port 27017
 
 ==============================================================================================================
 
@@ -70,6 +80,6 @@ echo '\n\nTearing down the Docker environment, please wait.\n\n'
 
 # if we don't specify -v then issue this one -> docker-compose exec mongo1 /usr/bin/mongo localhost:27017/SparkDemo --eval "db.dropDatabase()"
 
-dockder-compose down  -v
+docker-compose down  -v
 
 # note: we use a -v to remove the volumes, else you'll end up with old data
