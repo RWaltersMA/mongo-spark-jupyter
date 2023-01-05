@@ -78,28 +78,30 @@ services:
     ports:
       - "27017:27017"
     restart: always
-# mongo2:
-#    image: "mongo:5.0.5"
-#    container_name: mongo2
-#    command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
-#    volumes:
-#      - rs2:/data/db
-#    networks:
-#      - localnet
-#    ports:
-#      - "27018:27017"
-#    restart: always
-#  mongo3:
-#    image: "mongo:5.0.5"
-#    container_name: mongo3
-#    command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
-#    volumes:
-#      - rs3:/data/db
-#    networks:
-#      - localnet
-#    ports:
-#      - "27019:27017"
-#    restart: always
+
+  mongo2:
+    image: "mongo:latest"
+    container_name: mongo2
+    command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
+    volumes:
+      - rs2:/data/db
+    networks:
+      - localnet
+    ports:
+      - "27018:27017"
+    restart: always
+
+  mongo3:
+    image: "mongo:latest"
+    container_name: mongo3
+    command: --replSet rs0 --oplogSize 128 --bind_ip 0.0.0.0
+    volumes:
+      - rs3:/data/db
+    networks:
+      - localnet
+    ports:
+      - "27019:27017"
+    restart: always
 
 networks:
     localnet:
